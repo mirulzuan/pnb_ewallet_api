@@ -13,6 +13,8 @@ class WalletTransaction < ApplicationRecord
     hash["target_wallet_id"] = target_wallet_id
     hash["amount"] = amount
     hash["type"] = type
+    hash["date"] = created_at.strftime("%Y-%m-%d")
+    hash["time"] = created_at.strftime("%H:%M %p")
 
     return hash
   end

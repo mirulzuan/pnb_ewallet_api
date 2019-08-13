@@ -9,13 +9,25 @@ class WalletsController < ApplicationController
 
   # POST /wallets
   def transfer
-    @debit = @wallet.debit_txns.new(transaction_params)
-    @debit.user_id = @current_user.id
+    Wallet.transaction do
+      @source_wallet = @wallet
+      @target_wallet = Wallet.find(transaction_params[:target_wallet_id])
 
-    if @debit.save
-      render json: @wallet, status: :created, location: @wallet
-    else
-      render json: @debit.errors, status: :unprocessable_entity
+      @source_wallet.lock!
+      @target_wallet.lock!
+
+      @source_wallet.credit -= transaction_params[:amount].to_d
+      @target_wallet.credit += transaction_params[:amount].to_d
+
+      if @source_wallet.save!
+        debit = @source_wallet.debit_txns.new(transaction_params)
+        debit.user_id = @current_user.id
+        debit.save!
+
+        render json: @source_wallet, status: :created, location: @source_wallet
+      else
+        render json: @source_wallet.errors, status: :unprocessable_entity
+      end
     end
   end
 
