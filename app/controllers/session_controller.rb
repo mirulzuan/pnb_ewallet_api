@@ -12,6 +12,7 @@ class SessionController < ApplicationController
                name: @user.name,
                email: @user.email,
                role: @user.role,
+               wallets: @user.wallets,
              },
              status: :ok
     else

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_171713) do
+ActiveRecord::Schema.define(version: 2019_08_12_180544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -27,4 +27,13 @@ ActiveRecord::Schema.define(version: 2019_08_12_171713) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "wallets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.decimal "credit", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_wallets_on_user_id"
+  end
+
+  add_foreign_key "wallets", "users"
 end

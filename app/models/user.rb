@@ -3,6 +3,9 @@ class User < ApplicationRecord
 
   enum role: [:user, :team, :stock]
 
+  has_many :wallets, dependent: :destroy
+  accepts_nested_attributes_for :wallets
+
   validates :email, presence: true, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
@@ -17,6 +20,7 @@ class User < ApplicationRecord
     hash["email"] = email
     hash["name"] = name
     hash["role"] = role
+    hash["wallets"] = wallets
 
     return hash
   end
