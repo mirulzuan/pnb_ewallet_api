@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_180544) do
+ActiveRecord::Schema.define(version: 2019_08_13_050419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -27,6 +27,19 @@ ActiveRecord::Schema.define(version: 2019_08_12_180544) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "wallet_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "source_wallet_id"
+    t.uuid "target_wallet_id"
+    t.decimal "amount", precision: 10, scale: 2, default: "0.0"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_wallet_id"], name: "index_wallet_transactions_on_source_wallet_id"
+    t.index ["target_wallet_id"], name: "index_wallet_transactions_on_target_wallet_id"
+    t.index ["user_id"], name: "index_wallet_transactions_on_user_id"
+  end
+
   create_table "wallets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.decimal "credit", precision: 10, scale: 2, default: "0.0"
@@ -35,5 +48,8 @@ ActiveRecord::Schema.define(version: 2019_08_12_180544) do
     t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 
+  add_foreign_key "wallet_transactions", "users"
+  add_foreign_key "wallet_transactions", "wallets", column: "source_wallet_id"
+  add_foreign_key "wallet_transactions", "wallets", column: "target_wallet_id"
   add_foreign_key "wallets", "users"
 end
