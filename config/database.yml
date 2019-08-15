@@ -21,7 +21,7 @@ default: &default
 
 development:
   <<: *default
-  database: pbb_api_development
+  database: pnb_ewallet_api_development
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASS'] %>
   host: localhost

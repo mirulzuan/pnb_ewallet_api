@@ -2,6 +2,13 @@ class WalletsController < ApplicationController
   before_action :authorize_request
   before_action :set_wallet, only: [:show, :transfer]
 
+  # GET /wallets
+  def index
+    @wallets = Wallet.joins(:user).select("wallets.*, users.role").group_by(&:role).as_json
+
+    render json: @wallets
+  end
+
   # GET /wallets/1
   def show
     render json: @wallet

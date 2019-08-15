@@ -6,7 +6,7 @@ class Wallet < ApplicationRecord
   has_many :credit_txns, class_name: "Credit", foreign_key: "target_wallet_id"
 
   validate :balance
-  validate :pin_entered
+  validate :pin_entered, on: :update
 
   def transactions
     WalletTransaction
@@ -21,6 +21,9 @@ class Wallet < ApplicationRecord
     hash["id"] = id
     hash["credit"] = credit
     hash["transactions"] = transactions.as_json
+    hash["owner"] = {}
+    hash["owner"]["type"] = user.role
+    hash["owner"]["name"] = user.name
 
     return hash
   end

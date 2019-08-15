@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         get :current
       end
     end
-    resources :wallets, only: [:show] do
+    resources :wallets, only: [:index, :show] do
       member do
         post :transfer
       end
