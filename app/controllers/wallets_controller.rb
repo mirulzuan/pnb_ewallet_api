@@ -14,19 +14,21 @@ class WalletsController < ApplicationController
       @target_wallet = Wallet.find(transaction_params[:target_wallet_id])
 
       @source_wallet.lock!
-      @target_wallet.lock!
-
       @source_wallet.credit -= transaction_params[:amount].to_d
+      @source_wallet.pin = transaction_params[:pin]
+
+      @target_wallet.lock!
       @target_wallet.credit += transaction_params[:amount].to_d
 
-      if @source_wallet.save!
+      if @source_wallet.save
+        @target_wallet.save(validate: false)
         debit = @source_wallet.debit_txns.new(transaction_params)
         debit.user_id = @current_user.id
         debit.save!
 
         render json: @source_wallet, status: :created, location: @source_wallet
       else
-        render json: @source_wallet.errors, status: :unprocessable_entity
+        render json: @source_wallet.errors.full_messages, status: :unprocessable_entity
       end
     end
   end
@@ -40,6 +42,6 @@ class WalletsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def transaction_params
-    params.require(:wallet_transaction).permit(:target_wallet_id, :amount)
+    params.require(:wallet_transaction).permit(:target_wallet_id, :amount, :pin)
   end
 end

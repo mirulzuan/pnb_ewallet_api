@@ -1,9 +1,11 @@
 class WalletTransaction < ApplicationRecord
+  attr_accessor :pin
+
   belongs_to :user
   belongs_to :source_wallet, class_name: "Wallet"
   belongs_to :target_wallet, class_name: "Wallet"
 
-  validates :amount, presence: true
+  validates :amount, presence: true, numericality: { greater_than: 0 }
 
   def as_json(options = {})
     hash = {}

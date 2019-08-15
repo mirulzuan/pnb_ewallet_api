@@ -20,7 +20,7 @@ class User < ApplicationRecord
     hash["email"] = email
     hash["name"] = name
     hash["role"] = role
-    hash["wallets"] = wallets
+    hash["wallets"] = wallets.order("created_at ASC")
 
     return hash
   end
