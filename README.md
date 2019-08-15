@@ -1,24 +1,29 @@
-# README
+# pnb_ewallet_api
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> API app powered by Ruby on Rails
 
-Things you may want to cover:
+-------------------------------------------------
+### Dependencies
+|Library :|Version|
+|--------|:------|
+|ruby|2.6.1|
+|rails|5.2.3|
+|postgreSQL|11.2|
 
-* Ruby version
+-------------------------------------------------
+## Run
 
-* System dependencies
+``` bash
+# install dependencies
+$ bundle
 
-* Configuration
+# create DB
+$ rails db:setup
 
-* Database creation
+# run server
+$ rails s
+```
 
-* Database initialization
+http://pnb-ewallet-api.lvh.me serves the API's
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+-------------------------------------------------

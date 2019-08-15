@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  constraints subdomain: /^(pnb-api)$/ do
+  constraints subdomain: /^(pnb-ewallet-api)$/ do
     post "/auth/login", to: "session#login"
     resources :users do
       collection do
