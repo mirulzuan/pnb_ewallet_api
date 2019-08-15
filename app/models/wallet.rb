@@ -1,5 +1,6 @@
 class Wallet < ApplicationRecord
   attr_accessor :pin
+  attr_accessor :amount_transferred
 
   belongs_to :user
   has_many :debit_txns, class_name: "Debit", foreign_key: "source_wallet_id"
@@ -7,6 +8,7 @@ class Wallet < ApplicationRecord
 
   validate :balance
   validate :pin_entered, on: :update
+  validates :amount_transferred, presence: true, numericality: { greater_than: 0 }, on: :update
 
   def transactions
     WalletTransaction

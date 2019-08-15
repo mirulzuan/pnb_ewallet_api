@@ -22,6 +22,7 @@ class WalletsController < ApplicationController
 
       @source_wallet.lock!
       @source_wallet.credit -= transaction_params[:amount].to_d
+      @source_wallet.amount_transferred = transaction_params[:amount].to_d
       @source_wallet.pin = transaction_params[:pin]
 
       @target_wallet.lock!
